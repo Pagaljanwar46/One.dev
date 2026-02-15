@@ -322,9 +322,56 @@
             border-color: #555;
             transform: translateY(-2px);
         }
+
+        /*cursor*/
+        /* Hide the default mouse cursor */
+body {
+    cursor: none; 
+}
+
+/* The small fast dot */
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #ffffff; /* Change color here */
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
+/* The larger, slow laggy circle */
+.cursor-circle {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgb(255, 255, 255); /* Border color */
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, background-color 0.3s;
+}
+
+/* State when hovering over links/buttons */
+body.hovering .cursor-circle {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(0, 0, 0, 0.1); /* Slight fill on hover */
+    border-color: transparent;
+}
+
     </style>
 </head>
 <body>
+<!--curser-->
+<div class="cursor-dot"></div>
+<div class="cursor-circle"></div>
 
     <header class="hero">
         <div class="hero-bg"></div>
@@ -345,27 +392,27 @@
         </div>
         
         <div class="works-grid">
-            <a href="#" class="work-card">
-                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" alt="Project 1">
+            <a href="https://kendrickartists.com/" class="work-card">
+                <img src="https://res.cloudinary.com/dgcr7e27r/image/upload/v1771151477/Screenshot_2026-02-15_160040_smtgpl.png" alt="Project 1">
                 <div class="work-meta">
-                    <div class="work-name">Daydream Player</div>
-                    <div class="work-cat">Web / 3D</div>
+                    <div class="work-name">Kendrick & Artists</div>
+                    <div class="work-cat">Talent</div>
                 </div>
             </a>
 
-            <a href="#" class="work-card">
-                <img src="https://images.unsplash.com/photo-1634152962476-4b8a00e1915c?q=80&w=800&auto=format&fit=crop" alt="Project 2">
+            <a href="https://pagaljanwar46.github.io/Menu-Classic-/index.html" class="work-card">
+                <img src="https://res.cloudinary.com/dgcr7e27r/image/upload/v1771151066/Screenshot_2026-02-15_155331_b77zof.png" alt="Project 2">
                 <div class="work-meta">
-                    <div class="work-name">Bennszorult Lélegzet</div>
-                    <div class="work-cat">Interactive</div>
+                    <div class="work-name">ZZZ Palace</div>
+                    <div class="work-cat">Classic</div>
                 </div>
             </a>
 
-            <a href="#" class="work-card">
-                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop" alt="Project 3">
+            <a href="https://pagaljanwar46.github.io/3D-Album/" class="work-card">
+                <img src="https://res.cloudinary.com/dgcr7e27r/image/upload/v1771151309/Screenshot_2026-02-15_155801_hcmfeh.png" alt="Project 3">
                 <div class="work-meta">
-                    <div class="work-name">ParkBee</div>
-                    <div class="work-cat">Product Design</div>
+                    <div class="work-name">Album</div>
+                    <div class="work-cat">Image / 3D</div>
                 </div>
             </a>
         </div>
@@ -658,5 +705,60 @@
 
         animate();
     </script>
+
+    <!--Curser-->
+    <script>
+    const dot = document.querySelector('.cursor-dot');
+    const circle = document.querySelector('.cursor-circle');
+
+    // Variables to track mouse position and element position
+    let mouseX = 0;
+    let mouseY = 0;
+    let dotX = 0;
+    let dotY = 0;
+    let circleX = 0;
+    let circleY = 0;
+
+    // 1. Track the actual mouse movement
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    // 2. Add hover effect to links and buttons
+    // You can add the class 'hover-target' to any specific element you want to trigger the effect
+    const hoverables = document.querySelectorAll('a, button, .hover-target');
+    
+    hoverables.forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+
+    // 3. Animation Loop (The "Lag" Logic)
+    function animateCursor() {
+        // Linear Interpolation (Lerp)
+        // Formula: current = current + (target - current) * speed
+        
+        // Dot moves fast (speed 0.2)
+        dotX += (mouseX - dotX) * 0.2;
+        dotY += (mouseY - dotY) * 0.2;
+        
+        // Circle moves slow (speed 0.1) creates the lag
+        circleX += (mouseX - circleX) * 0.1;
+        circleY += (mouseY - circleY) * 0.1;
+
+        // Apply styles
+        dot.style.left = `${dotX}px`;
+        dot.style.top = `${dotY}px`;
+        
+        circle.style.left = `${circleX}px`;
+        circle.style.top = `${circleY}px`;
+
+        requestAnimationFrame(animateCursor);
+    }
+
+    // Start the loop
+    animateCursor();
+</script>
 </body>
 </html>

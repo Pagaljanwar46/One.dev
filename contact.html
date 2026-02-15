@@ -279,8 +279,8 @@
     </div>
 
     <div class="avatars anim-item anim-delay-1">
-        <div class="avatar" style="background-image: url('https://i.pravatar.cc/150?img=68');"></div>
-        <div class="avatar" style="background-image: url('https://i.pravatar.cc/150?img=33');"></div>
+        <div class="avatar" style="background-image: url('https://res.cloudinary.com/dgcr7e27r/image/upload/v1771154112/Screenshot_20250611_184353_WhatsApp_fsnn3a.jpg');"></div>
+        <div class="avatar" style="background-image: url('https://res.cloudinary.com/dgcr7e27r/image/upload/v1771154265/WhatsApp_Image_2026-02-15_at_16.47.13_tz5aey.jpg');"></div>
     </div>
 
     <div class="hero-text anim-item anim-delay-2">
@@ -289,9 +289,12 @@
     </div>
 
     <form class="contact-form" id="contactForm">
-        <input type="text" class="form-input anim-item anim-delay-3" placeholder="Name" required>
-        <input type="email" class="form-input anim-item anim-delay-4" placeholder="Email" required>
-        <textarea class="form-input anim-item anim-delay-5" placeholder="Your Message"></textarea>
+        <input type="text" name="from_name" class="form-input anim-item anim-delay-3" placeholder="Name" required>
+
+<input type="email" name="from_email" class="form-input anim-item anim-delay-4" placeholder="Email" required>
+
+<textarea name="message" class="form-input anim-item anim-delay-5" placeholder="Your Message" required></textarea>
+
         
         <button type="submit" class="send-btn anim-item anim-delay-6" id="submitBtn">
             <span id="btnText">Send</span>
@@ -299,9 +302,19 @@
     </form>
 
     <div class="divider">OR</div>
-    <a href="#" class="email-link">Send email to studio@budobud.graphics</a>
+    <a href="#" class="email-link">Send email to skaftab2025@outlook.com</a>
 
 </div>
+
+
+<!--email JS-->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  (function(){
+      emailjs.init("y2QtL7MIldSoVuijD");
+  })();
+
+</script>
 
 <script>
     // --- Testimonial Rotator ---
@@ -309,7 +322,6 @@
     const q2 = document.getElementById('quote2');
     
     setInterval(() => {
-        // Toggle active class to trigger CSS transition
         if(q1.classList.contains('active')){
             q1.classList.remove('active');
             q2.classList.add('active');
@@ -319,34 +331,49 @@
         }
     }, 4000);
 
-    // --- Button "Sent" Animation ---
+    // --- EmailJS Form Submit ---
     const form = document.getElementById('contactForm');
     const btn = document.getElementById('submitBtn');
     const btnText = document.getElementById('btnText');
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        // 1. Change text to "Sending..."
+
+        // Show sending state
         btnText.innerText = "Sending...";
         btn.style.opacity = "0.7";
 
-        // 2. Simulate network delay (1 second)
-        setTimeout(() => {
-            // 3. Success State
+        emailjs.sendForm(
+            "service_a9p2lkp",
+            "template_n5fx9fn",
+            this
+        ).then(function() {
+
+            // Success state
             btn.classList.add('sent');
             btn.style.opacity = "1";
             btnText.innerHTML = "Sent ✓";
-            
-            // Optional: Reset form after a few seconds
+
             setTimeout(() => {
                 form.reset();
                 btn.classList.remove('sent');
                 btnText.innerText = "Send";
             }, 3000);
-        }, 1000);
+
+        }).catch(function(error) {
+
+            // Error state
+            btnText.innerText = "Failed ❌";
+            btn.style.opacity = "1";
+            console.error("EmailJS Error:", error);
+
+            setTimeout(() => {
+                btnText.innerText = "Send";
+            }, 3000);
+        });
     });
 </script>
+
 
 </body>
 </html>
